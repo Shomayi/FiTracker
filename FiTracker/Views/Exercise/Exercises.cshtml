@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Exercises";
+}
+
+@model List<Exercise>
+
+<div class="text-center">
+    <h1 class="display-4">Exercises</h1>
+    <a asp-action="CreateEditExercise" class="btn btn-primary">Add</a>
+    <br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Weight
+                </th>
+                <th>
+                    Sets
+                </th>
+                <th>
+                    Reps
+                </th>
+                <th>
+                    Edit
+                </th>
+                <th>
+                    Delete
+                </th>
+            </tr>
+        </thead>   
+        <tbody>
+            @{
+                foreach (var exercise in Model)
+                {
+                    <tr>
+                        <td>
+                            @exercise.Name
+                        </td>
+                        <td>
+                            @exercise.Weight
+                        </td>
+                        <td>
+                            @exercise.Sets
+                        </td>
+                        <td>
+                            @exercise.Reps
+                        </td>
+                        <td>
+                            <a asp-action="CreateEditExercise" asp-route-id="@exercise.Id">Edit</a>
+                        </td>
+                        <td>
+                            <a asp-action="DeleteExercise" asp-route-id="@exercise.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

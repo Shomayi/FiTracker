@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Create / Edit Exercise";
+}
+
+@model FiTracker.Models.Exercise
+
+<div class="text-center">
+    <h1 class="display-4">Create or edit exercise</h1>
+</div>
+
+<form asp-action="CreateEditExerciseForm" asp-controller="Exercise">
+    <input hidden class="form-control" type="number" placeholder="0" asp-for="Id" />
+
+    <label class="mt-4">Name</label>
+    <input class="form-control" type="text" placeholder="Add exercise name" asp-for="Name" />
+
+    <label class="mt-4">Weight</label>
+    <input class="form-control" type="number" placeholder="0" asp-for="Weight"/>
+
+    <label class="mt-4">Sets</label>
+    <input class="form-control" type="number" placeholder="0" asp-for="Sets"/>
+
+    <label class="mt-4">Reps</label>
+    <input class="form-control" type="number" placeholder="0" asp-for="Reps" />
+
+    <button class="btw btn-primary mt-4" type="submit">Confirm</button>
+
+</form>
