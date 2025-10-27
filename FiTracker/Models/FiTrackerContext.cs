@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FiTracker.Models
 {
-    public class FiTrackerContext : IdentityDbContext<Users>
+    public class FiTrackerContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Exercise> Exercises { get; set; }
 

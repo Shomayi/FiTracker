@@ -1,3 +1,4 @@
+using FiTracker.BLL;
 using FiTracker.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,7 @@ namespace FiTracker
             {
                 options.UseSqlServer("Server=mssqlstud.fhict.local;Database=dbi297707;User Id=dbi297707;Password=Toftefrume4;TrustServerCertificate=True;");
             });
-            builder.Services.AddIdentity<Users, IdentityRole>(options =>
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 6;
@@ -27,6 +28,7 @@ namespace FiTracker
                 options.SignIn.RequireConfirmedEmail = false;
             }).AddEntityFrameworkStores<FiTrackerContext>()
             .AddDefaultTokenProviders();
+            builder.Services.AddScoped<IUserService, UserService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
