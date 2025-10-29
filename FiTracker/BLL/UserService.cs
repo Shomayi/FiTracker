@@ -7,10 +7,12 @@ namespace FiTracker.BLL
     public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public UserService(UserManager<ApplicationUser> userManager)
+        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public async Task<RegistrationResult> RegisterUserAsync(RegisterViewModel model)
@@ -28,6 +30,22 @@ namespace FiTracker.BLL
                 Succeeded = result.Succeeded,
                 Errors = result.Errors.Select(e => e.Description).ToList()
             };
+        }
+
+        public async Task<LoginResult> LoginUserAsync(LoginViewModel model)
+        {
+            var result = await _signInManager.PasswordSignInAsync(
+                model.Email,
+                model.Password,
+                model.RememberMe,
+                lockoutOnFailure: false);
+
+            if (result.Succeeded)
+            {
+                return new LoginResult { Succeeded = true };
+            }
+
+            return new LoginResult { Succeeded = false, ErrorMessage = "Invalid login attempt." };
         }
     }
 }
