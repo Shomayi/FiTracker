@@ -1,4 +1,4 @@
-﻿using FiTracker.BLL;
+﻿using FiTracker.BLL.Interfaces;
 using FiTracker.Models;
 using FiTracker.ViewModels;
 using Microsoft.AspNetCore.Identity;

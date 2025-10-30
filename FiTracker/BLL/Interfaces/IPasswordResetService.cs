@@ -1,6 +1,6 @@
 ﻿using FiTracker.ViewModels;
 
-namespace FiTracker.BLL
+namespace FiTracker.BLL.Interfaces
 {
     public interface IPasswordResetService
     {

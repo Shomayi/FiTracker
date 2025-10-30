@@ -1,8 +1,9 @@
-﻿using FiTracker.Models;
+﻿using FiTracker.BLL.Interfaces;
+using FiTracker.Models;
 using FiTracker.ViewModels;
 using Microsoft.AspNetCore.Identity;
 
-namespace FiTracker.BLL
+namespace FiTracker.BLL.Services
 {
     public class UserAuthenticationService : IUserAuthenticationService
     {
