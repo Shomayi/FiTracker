@@ -12,6 +12,7 @@
         }
         <h2 class="text-center mb-4">Login</h2>
         <form asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="mb-3">
                 <label asp-for="Email" class="form-label"></label>
@@ -39,9 +40,6 @@
             <p class="text-center mt-2">
                 Don't have an account <a asp-controller="Account" asp-action="Register" class="text-decoration-none">Register</a>
             </p>
-            <div class="text-center">
-                <a asp-controller="Home" asp-action="Index" class="text-decortaion-none mt-3">Back</a>
-            </div>
         </form>
     </div>
 </div>

@@ -17,5 +17,7 @@ namespace FiTracker.ViewModels
         [DataType(DataType.Password)]
         [Display(Name ="Confirm New Password")]
         public string ConfirmNewPassword { get; set; }
+        [Required]
+        public string Token { get; set; }
     }
 }

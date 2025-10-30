@@ -25,6 +25,7 @@ namespace FiTracker.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -47,6 +48,7 @@ namespace FiTracker.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -67,31 +69,33 @@ namespace FiTracker.Controllers
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task <IActionResult> VerifyEmail(VerifyEmailViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            await _passwordResetService.SendPasswordResetEmailAsync(model.Email); 
+            await _passwordResetService.SendPasswordResetEmailAsync(model.Email);
+
+            TempData["Message"] = "If an account with that email exists, a password reset link has been sent.";
             
-            ViewBag.Message = "If an account with that email exists, a password reset link has been sent.";
             return View();
         }
         [HttpGet]
         public IActionResult ChangePassword(string email, string token)
         {          
-            var model = new ChangePasswordViewModel { Email = email };
-            ViewBag.Token = token;
+            var model = new ChangePasswordViewModel { Email = email, Token = token };
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model, string token)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = await _passwordResetService.ResetPasswordAsync(model, token);
+            var result = await _passwordResetService.ResetPasswordAsync(model, model.Token);
 
             if (result.Succeeded)
             {
@@ -100,8 +104,16 @@ namespace FiTracker.Controllers
             }
 
             ModelState.AddModelError(string.Empty, result.ErrorMessage);
-            ViewBag.Token = token;
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _authService.LogoutAsync();
+            TempData["Message"] = "You have been logged out successfully.";
+            return RedirectToAction("Login", "Account");
         }
     }
 }

@@ -29,5 +29,10 @@ namespace FiTracker.BLL.Services
 
             return new LoginResult { Succeeded = false, ErrorMessage = "Invalid login attempt." };
         }
+
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
+        }
     }
 }
