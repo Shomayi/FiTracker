@@ -57,8 +57,20 @@ namespace FiTracker.Controllers
 
             return View(model);
         }
+        [HttpGet]
         public IActionResult VerifyEmail()
         {
+            return View();
+        }
+        [HttpPost]
+        public async Task <IActionResult> VerifyEmail(VerifyEmailViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            await _userService.SendPasswordResetEmailAsync(model.Email); 
+            
+            ViewBag.Message = "If an account with that email exists, a password reset link has been sent.";
             return View();
         }
         public IActionResult ChangePassword()

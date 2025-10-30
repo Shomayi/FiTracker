@@ -6,5 +6,6 @@ namespace FiTracker.BLL
     {
         Task<RegistrationResult> RegisterUserAsync(RegisterViewModel model);
         Task<LoginResult> LoginUserAsync(LoginViewModel model);
+        Task<bool> SendPasswordResetEmailAsync(string email);
     }
 }

@@ -20,6 +20,11 @@
     </div>
 </div>
 
+@if (ViewBag.Message != null)
+{
+    <p>@ViewBag.Message</p>
+}
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");

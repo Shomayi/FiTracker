@@ -47,5 +47,21 @@ namespace FiTracker.BLL
 
             return new LoginResult { Succeeded = false, ErrorMessage = "Invalid login attempt." };
         }
+
+        public async Task<bool> SendPasswordResetEmailAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var resetLink = $"https://localhost:7094/Account/ChangePassword?email={Uri.EscapeDataString(email)}&token={Uri.EscapeDataString(token)}";
+
+            Console.WriteLine($"Password reset link: {resetLink}");
+
+            return true;
+        }
     }
 }
