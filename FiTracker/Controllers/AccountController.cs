@@ -8,11 +8,15 @@ namespace FiTracker.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IUserRegistrationService _registrationService;
+        private readonly IUserAuthenticationService _authService;
+        private readonly IPasswordResetService _passwordResetService;
 
-        public AccountController(IUserService userService)
+        public AccountController(IUserRegistrationService registrationService, IUserAuthenticationService authService,IPasswordResetService passwordResetService)
         {
-            _userService = userService;
+            _registrationService = registrationService;
+            _authService = authService;
+            _passwordResetService = passwordResetService;
         }
         [HttpGet]
         public IActionResult Login()
@@ -26,7 +30,7 @@ namespace FiTracker.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = await _userService.LoginUserAsync(model);
+            var result = await _authService.LoginUserAsync(model);
 
             if (result.Succeeded)
             {
@@ -47,7 +51,7 @@ namespace FiTracker.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var result = await _userService.RegisterUserAsync(model);
+            var result = await _registrationService.RegisterUserAsync(model);
 
             if (result.Succeeded)
                 return RedirectToAction("Login", "Account");
@@ -68,7 +72,7 @@ namespace FiTracker.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            await _userService.SendPasswordResetEmailAsync(model.Email); 
+            await _passwordResetService.SendPasswordResetEmailAsync(model.Email); 
             
             ViewBag.Message = "If an account with that email exists, a password reset link has been sent.";
             return View();
@@ -87,7 +91,7 @@ namespace FiTracker.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = await _userService.ResetPasswordAsync(model, token);
+            var result = await _passwordResetService.ResetPasswordAsync(model, token);
 
             if (result.Succeeded)
             {

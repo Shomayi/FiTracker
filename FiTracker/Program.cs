@@ -28,7 +28,9 @@ namespace FiTracker
                 options.SignIn.RequireConfirmedEmail = false;
             }).AddEntityFrameworkStores<FiTrackerContext>()
             .AddDefaultTokenProviders();
-            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
+            builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
+            builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

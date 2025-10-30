@@ -2,10 +2,8 @@
 
 namespace FiTracker.BLL
 {
-    public interface IUserService
+    public interface IPasswordResetService
     {
-        Task<RegistrationResult> RegisterUserAsync(RegisterViewModel model);
-        Task<LoginResult> LoginUserAsync(LoginViewModel model);
         Task<bool> SendPasswordResetEmailAsync(string email);
         Task<PasswordResetResult> ResetPasswordAsync(ChangePasswordViewModel model, string token);
     }
