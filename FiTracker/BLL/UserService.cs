@@ -63,5 +63,25 @@ namespace FiTracker.BLL
 
             return true;
         }
+
+        public async Task<PasswordResetResult> ResetPasswordAsync(ChangePasswordViewModel model, string token)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return new PasswordResetResult { Succeeded = false, ErrorMessage = "Invalid request." };
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+
+            if (result.Succeeded)
+                return new PasswordResetResult { Succeeded = true };
+
+            return new PasswordResetResult
+            {
+                Succeeded = false,
+                ErrorMessage = string.Join(", ", result.Errors.Select(e => e.Description))
+            };
+        }
     }
 }

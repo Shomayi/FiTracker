@@ -73,9 +73,31 @@ namespace FiTracker.Controllers
             ViewBag.Message = "If an account with that email exists, a password reset link has been sent.";
             return View();
         }
-        public IActionResult ChangePassword()
+        [HttpGet]
+        public IActionResult ChangePassword(string email, string token)
+        {          
+            var model = new ChangePasswordViewModel { Email = email };
+            ViewBag.Token = token;
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model, string token)
         {
-            return View();
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var result = await _userService.ResetPasswordAsync(model, token);
+
+            if (result.Succeeded)
+            {
+                TempData["Message"] = "Password reset successfully. You can now log in.";
+                return RedirectToAction("Login");
+            }
+
+            ModelState.AddModelError(string.Empty, result.ErrorMessage);
+            ViewBag.Token = token;
+            return View(model);
         }
     }
 }
