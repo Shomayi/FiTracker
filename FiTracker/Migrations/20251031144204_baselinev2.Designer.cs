@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FiTracker.Migrations
 {
     [DbContext(typeof(FiTrackerContext))]
-    [Migration("20251031135536_CreateExerciseTable")]
-    partial class CreateExerciseTable
+    [Migration("20251031144204_baselinev2")]
+    partial class baselinev2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
