@@ -1,6 +1,7 @@
 ﻿using FiTracker.BLL.Interfaces;
 using FiTracker.Models;
 using FiTracker.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,12 +19,14 @@ namespace FiTracker.Controllers
             _authService = authService;
             _passwordResetService = passwordResetService;
         }
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Login()
         {
+            if (User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
             return View();
         }
-
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -41,12 +44,14 @@ namespace FiTracker.Controllers
             ModelState.AddModelError(string.Empty, result.ErrorMessage);
             return View(model);
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Register()
         {
+            if (User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
             return View();
         }
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -63,11 +68,14 @@ namespace FiTracker.Controllers
 
             return View(model);
         }
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult VerifyEmail()
         {
+            if (User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
             return View();
         }
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task <IActionResult> VerifyEmail(VerifyEmailViewModel model)
@@ -81,13 +89,15 @@ namespace FiTracker.Controllers
             
             return View();
         }
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult ChangePassword(string email, string token)
-        {          
+        {
+            if (User.Identity.IsAuthenticated) return RedirectToAction("Index", "Home");
             var model = new ChangePasswordViewModel { Email = email, Token = token };
             return View(model);
         }
-
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)

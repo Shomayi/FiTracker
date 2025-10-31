@@ -1,7 +1,9 @@
 using FiTracker.BLL.Interfaces;
 using FiTracker.BLL.Services;
 using FiTracker.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace FiTracker
@@ -13,7 +15,11 @@ namespace FiTracker
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
             builder.Services.AddDbContext<FiTrackerContext>(options =>
             {
                 options.UseSqlServer("Server=mssqlstud.fhict.local;Database=dbi297707;User Id=dbi297707;Password=Toftefrume4;TrustServerCertificate=True;");
@@ -27,8 +33,13 @@ namespace FiTracker
                 options.User.RequireUniqueEmail = true;
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
-            }).AddEntityFrameworkStores<FiTrackerContext>()
-            .AddDefaultTokenProviders();
+            }).AddEntityFrameworkStores<FiTrackerContext>().AddDefaultTokenProviders();
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";   
+                options.LogoutPath = "/Account/Login"; 
+                options.AccessDeniedPath = "/Account/Login";
+            });
             builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
             builder.Services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
             builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
@@ -47,6 +58,7 @@ namespace FiTracker
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
