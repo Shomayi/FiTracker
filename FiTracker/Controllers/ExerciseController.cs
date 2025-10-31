@@ -1,60 +1,57 @@
-﻿using FiTracker.Models;
+﻿using FiTracker.BLL.Interfaces;
+using FiTracker.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FiTracker.Controllers
 {
     public class ExerciseController : Controller
     {
-        private readonly ILogger<ExerciseController> _logger;
+        private readonly IExerciseService _exerciseService;
 
-        private readonly FiTrackerContext _context;
-
-        public ExerciseController(ILogger<ExerciseController> logger, FiTrackerContext context)
+        public ExerciseController(IExerciseService exerciseService)
         {
-            _logger = logger;
-            _context = context;
+            _exerciseService = exerciseService;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
             return RedirectToAction("Exercises");
         }
-        public IActionResult Exercises()
+        [HttpGet]
+        public async Task<IActionResult> Exercises()
         {
-            var AllExercises = _context.Exercises.ToList();
-            return View(AllExercises);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var exercises = await _exerciseService.GetAllExercisesAsync(userId);
+            return View(exercises);
         }
-        public IActionResult CreateEditExercise(int? id)
-        {
-            if (id != null)
-            {
-                var exerciseInDb = _context.Exercises.SingleOrDefault(exercise => exercise.Id == id);
-                return View(exerciseInDb);
-            }
 
+        [HttpGet]
+        public IActionResult CreateExercise()
+        {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateExercise(ExerciseViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            await _exerciseService.AddExerciseAsync(model, userId);
+
+            return RedirectToAction("Exercises");
         }
 
         public IActionResult DeleteExercise(int id)
         {
-            var exerciseInDb = _context.Exercises.SingleOrDefault(exercise => exercise.Id == id);
-            _context.Exercises.Remove(exerciseInDb);
-            _context.SaveChanges();
+
             return RedirectToAction("Exercises");
         }
 
-        public IActionResult CreateEditExerciseForm(Exercise model)
+        public IActionResult CreateEditExerciseForm(ExerciseViewModel model)
         {
-            if (model.Id == 0)
-            {
-                _context.Exercises.Add(model);
-            }
-            else
-            {
-                _context.Exercises.Update(model);
-            }
-
-            _context.SaveChanges();
 
             return RedirectToAction("Exercises");
         }

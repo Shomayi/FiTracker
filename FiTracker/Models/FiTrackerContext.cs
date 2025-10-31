@@ -11,5 +11,16 @@ namespace FiTracker.Models
         {
              
         }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+
+            builder.Entity<Exercise>()
+                .HasOne(e => e.User)
+                .WithMany() 
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

@@ -1,12 +1,13 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Exercises";
 }
 
-@model List<Exercise>
+@model List<FiTracker.ViewModels.ExerciseViewModel>
 
 <div class="text-center">
     <h1 class="display-4">Exercises</h1>
-    <a asp-action="CreateEditExercise" class="btn btn-primary">Add</a>
+    <a asp-action="CreateExercise" class="btn btn-primary">Add</a>
     <br />
     <table class="table">
         <thead>
@@ -49,7 +50,7 @@
                             @exercise.Reps
                         </td>
                         <td>
-                            <a asp-action="CreateEditExercise" asp-route-id="@exercise.Id">Edit</a>
+                            <a asp-action="CreateExercise" asp-route-id="@exercise.Id">Edit</a>
                         </td>
                         <td>
                             <a asp-action="DeleteExercise" asp-route-id="@exercise.Id">Delete</a>
