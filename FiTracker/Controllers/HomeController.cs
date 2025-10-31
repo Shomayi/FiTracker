@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using FiTracker.Models;
+using FiTracker.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FiTracker.Controllers

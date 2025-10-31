@@ -1,4 +1,4 @@
-namespace FiTracker.Models
+namespace FiTracker.ViewModels
 {
     public class ErrorViewModel
     {
