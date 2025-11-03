@@ -3,6 +3,24 @@
 }
 
 @model FiTracker.ViewModels.ExerciseViewModel
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+    var errorMessage = TempData["ErrorMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success mt-3" role="alert">
+        @Html.Raw(successMessage)
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger mt-3" role="alert">
+        @Html.Raw(errorMessage)
+    </div>
+}
 
 <div class="text-center">
     <h1 class="display-4">Create exercise</h1>

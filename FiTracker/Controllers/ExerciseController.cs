@@ -1,4 +1,5 @@
-﻿using FiTracker.BLL.Interfaces;
+﻿using FiTracker.BLL;
+using FiTracker.BLL.Interfaces;
 using FiTracker.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,10 +38,22 @@ namespace FiTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateExercise(ExerciseViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
+            var errors = ExerciseValidator.Validate(model);
+            if (errors.Any())
+            {
+                TempData["ErrorMessage"] = string.Join("<br>", errors);
+                return View(model);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             await _exerciseService.AddExerciseAsync(model, userId);
 
+            TempData["SuccessMessage"] = "Exercise created successfully!";
             return RedirectToAction("Exercises");
         }
         [HttpGet]
@@ -59,12 +72,24 @@ namespace FiTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditExercise(ExerciseViewModel model)
         {
-            if (!ModelState.IsValid)
+            var errors = ExerciseValidator.Validate(model);
+            if (errors.Any())
+            {
+                TempData["ErrorMessage"] = string.Join("<br>", errors);
                 return View(model);
+            }
+
+            if (!ModelState.IsValid)
+            {
+
+                return View(model);
+            }
+
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             await _exerciseService.UpdateExerciseAsync(model, userId);
 
+            TempData["SuccessMessage"] = "Exercise updated successfully!";
             return RedirectToAction("Exercises");
         }
 
