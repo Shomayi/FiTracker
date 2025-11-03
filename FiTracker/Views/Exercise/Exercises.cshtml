@@ -52,7 +52,7 @@
                             @exercise.Name
                         </td>
                         <td>
-                            @exercise.Weight
+                            @(exercise.Weight.HasValue? (exercise.Weight.Value == 0 ? "Bodyweight" : exercise.Weight.Value.ToString("0.#")): "")
                         </td>
                         <td>
                             @exercise.Sets
