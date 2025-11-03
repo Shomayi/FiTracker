@@ -1,0 +1,20 @@
+﻿@using FiTracker.ViewModels
+@{
+    ViewData["Title"] = "Settings";
+}
+@model SettingsViewModel
+
+<h1 class="display-4">Settings</h1>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+}
+<form asp-action="Index" method="post">
+    @Html.AntiForgeryToken()
+    <label>Preferred Weight Unit:</label>
+    <select asp-for="PreferredWeightUnit" class="form-select">
+        <option value="kg">kg</option>
+        <option value="lbs">lbs</option>
+    </select>
+    <button type="submit" class="btn btn-primary mt-3">Save</button>
+</form>

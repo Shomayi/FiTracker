@@ -3,6 +3,7 @@ using FiTracker.BLL.Interfaces;
 using FiTracker.Models;
 using FiTracker.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -11,10 +12,12 @@ namespace FiTracker.Controllers
     public class ExerciseController : Controller
     {
         private readonly IExerciseService _exerciseService;
+        private readonly IUserSettingsService _userSettingsService;
 
-        public ExerciseController(IExerciseService exerciseService)
+        public ExerciseController(IExerciseService exerciseService, IUserSettingsService userSettingsService)
         {
             _exerciseService = exerciseService;
+            _userSettingsService = userSettingsService;
         }
         [HttpGet]
         public IActionResult Index()
@@ -26,6 +29,8 @@ namespace FiTracker.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             var exercises = await _exerciseService.GetAllExercisesAsync(userId);
+            var unit = await _userSettingsService.GetPreferredWeightUnitAsync(userId);
+            ViewBag.PreferredWeightUnit = unit;
             return View(exercises);
         }
 
