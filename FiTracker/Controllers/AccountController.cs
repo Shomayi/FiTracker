@@ -38,6 +38,7 @@ namespace FiTracker.Controllers
 
             if (result.Succeeded)
             {
+                TempData["Message"] = "You are now logged in!";
                 return RedirectToAction("Index", "Home");
             }
 
@@ -122,7 +123,7 @@ namespace FiTracker.Controllers
         public async Task<IActionResult> Logout()
         {
             await _authService.LogoutAsync();
-            TempData["Message"] = "You have been logged out successfully.";
+            TempData["Message"] = "You have been logged out successfully";
             return RedirectToAction("Login", "Account");
         }
     }

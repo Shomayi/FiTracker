@@ -38,15 +38,11 @@ namespace FiTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateExercise(ExerciseViewModel model)
         {
-            var errors = ExerciseValidator.Validate(model);
-            if (errors.Any())
-            {
-                TempData["ErrorMessage"] = string.Join("<br>", errors);
-                return View(model);
-            }
-
             if (!ModelState.IsValid)
             {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+
+                TempData["ErrorMessage"] = string.Join("<br>", errors);
                 return View(model);
             }
 
@@ -72,9 +68,10 @@ namespace FiTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditExercise(ExerciseViewModel model)
         {
-            var errors = ExerciseValidator.Validate(model);
-            if (errors.Any())
+            if (!ModelState.IsValid)
             {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+
                 TempData["ErrorMessage"] = string.Join("<br>", errors);
                 return View(model);
             }

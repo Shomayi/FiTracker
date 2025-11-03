@@ -47,8 +47,8 @@ namespace FiTracker.BLL.Services
             {
                 Name = model.Name,
                 Weight = model.Weight ?? 0,
-                Reps = model.Reps,
-                Sets = model.Sets,
+                Reps = model.Reps ?? 0,
+                Sets = model.Sets ?? 0,
                 UserId = userId
             };
 
@@ -64,8 +64,8 @@ namespace FiTracker.BLL.Services
 
             exercise.Name = model.Name;
             exercise.Weight = model.Weight ?? 0;
-            exercise.Sets = model.Sets;
-            exercise.Reps = model.Reps;
+            exercise.Sets = model.Sets ?? 0;
+            exercise.Reps = model.Reps ?? 0;
 
             await _context.SaveChangesAsync();
         }
