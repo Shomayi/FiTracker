@@ -60,13 +60,27 @@ namespace FiTracker.BLL.Services
             var exercise = await _context.Exercises.FirstOrDefaultAsync(e => e.Id == model.Id && e.UserId == userId);
 
             if (exercise == null)
-                throw new UnauthorizedAccessException("You do not have permission to edit this exercise");
+            {
+                throw new UnauthorizedAccessException("Exercise is not found or you do not have permission to edit this exercise");
+            }
 
             exercise.Name = model.Name;
             exercise.Weight = model.Weight ?? 0;
             exercise.Sets = model.Sets ?? 0;
             exercise.Reps = model.Reps ?? 0;
 
+            await _context.SaveChangesAsync();
+        }
+        public async Task DeleteExerciseAsync(int id, string userId)
+        {
+            var exercise = await _context.Exercises.FirstOrDefaultAsync(e => e.Id == id && e.UserId == userId);
+
+            if (exercise == null)
+            {
+                throw new InvalidOperationException("Exercise is not found or you do not have permission to edit this exercise");
+            }
+
+            _context.Exercises.Remove(exercise);
             await _context.SaveChangesAsync();
         }
     }

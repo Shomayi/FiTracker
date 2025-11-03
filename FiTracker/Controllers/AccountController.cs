@@ -123,7 +123,7 @@ namespace FiTracker.Controllers
         public async Task<IActionResult> Logout()
         {
             await _authService.LogoutAsync();
-            TempData["Message"] = "You have been logged out successfully";
+            TempData["Message"] = "You have been logged out!";
             return RedirectToAction("Login", "Account");
         }
     }

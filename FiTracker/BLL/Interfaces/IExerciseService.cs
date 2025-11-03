@@ -8,6 +8,6 @@ namespace FiTracker.BLL.Interfaces
         Task<ExerciseViewModel?> GetExerciseByIdAsync(int id, string userId);
         Task AddExerciseAsync(ExerciseViewModel model, string userId);
         Task UpdateExerciseAsync(ExerciseViewModel model, string userId);
-        //    Task DeleteExerciseAsync(int id, string userId);
+        Task DeleteExerciseAsync(int id, string userId);
     }
 }

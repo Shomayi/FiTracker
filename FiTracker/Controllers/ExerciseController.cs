@@ -1,5 +1,6 @@
 ﻿using FiTracker.BLL;
 using FiTracker.BLL.Interfaces;
+using FiTracker.Models;
 using FiTracker.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +50,7 @@ namespace FiTracker.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             await _exerciseService.AddExerciseAsync(model, userId);
 
-            TempData["SuccessMessage"] = "Exercise created successfully!";
+            TempData["SuccessMessage"] = $"Exercise {model.Name} has been created successfully.";
             return RedirectToAction("Exercises");
         }
         [HttpGet]
@@ -59,8 +60,10 @@ namespace FiTracker.Controllers
             var exercise = await _exerciseService.GetExerciseByIdAsync(id, userId);
 
             if (exercise == null)
-                return NotFound(); // or redirect to Exercises with an error
-
+            {
+                TempData["ErrorMessage"] = "Invalid exercise entry or you do not have access";
+                return RedirectToAction("Exercises");
+            }
             return View(exercise);
         }
 
@@ -76,22 +79,29 @@ namespace FiTracker.Controllers
                 return View(model);
             }
 
-            if (!ModelState.IsValid)
-            {
-
-                return View(model);
-            }
-
-
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             await _exerciseService.UpdateExerciseAsync(model, userId);
 
-            TempData["SuccessMessage"] = "Exercise updated successfully!";
+            TempData["SuccessMessage"] = $"Exercise {model.Name} has been updated successfully.";
             return RedirectToAction("Exercises");
         }
 
-        public IActionResult DeleteExercise(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteExercise(int id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var exercise = await _exerciseService.GetExerciseByIdAsync(id, userId);
+
+            try
+            {
+                await _exerciseService.DeleteExerciseAsync(id, userId);
+                TempData["SuccessMessage"] = $"Exercise {exercise.Name} has been deleted successfully.";
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
 
             return RedirectToAction("Exercises");
         }
