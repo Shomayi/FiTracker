@@ -45,6 +45,7 @@ namespace FiTracker
             builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
             builder.Services.AddScoped<IExerciseService, ExerciseService>();
             builder.Services.AddScoped<IUserSettingsService, UserSettingsService>();
+            builder.Services.AddScoped<IWorkoutService, WorkoutService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

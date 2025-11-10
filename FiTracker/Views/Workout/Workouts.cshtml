@@ -2,10 +2,11 @@
     ViewData["Title"] = "Worktouts";
 }
 
-@model List<FiTracker.ViewModels.ExerciseViewModel>
+@model List<FiTracker.ViewModels.WorkoutViewModel>
 
 <div class="text-center">
     <h1 class="display-4">Workouts</h1>
+
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success">@TempData["SuccessMessage"]</div>
@@ -13,8 +14,30 @@
 
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger">
-            @TempData["ErrorMessage"]
-        </div>
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
     }
+
+    <a asp-action="CreateWorkout" class="btn btn-primary mb-3">Create New Workout</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Number of Exercises</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var workout in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="WorkoutDetails" asp-route-id="@workout.Id">
+                            @workout.Name
+                        </a>
+                    </td>
+                    <td>@workout.ExerciseCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
