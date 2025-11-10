@@ -29,31 +29,46 @@ namespace FiTracker.BLL.Services
             }).ToList();
         }
 
-        public async Task CreateWorkoutAsync(WorkoutViewModel workoutVm, string userId)
+        public async Task<WorkoutViewModel> GetCreateWorkoutViewModelAsync(string userId)
         {
-            if (workoutVm == null)
-                throw new ArgumentNullException(nameof(workoutVm));
+            var exercises = await _context.Exercises
+                .Where(e => e.UserId == userId)
+                .ToListAsync();
 
+            return new WorkoutViewModel
+            {
+                Name = "",
+                SelectedExercises = new List<ExerciseViewModel>(),
+                AvailableExercises = exercises.Select(e => new ExerciseViewModel
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Weight = e.Weight,
+                    Sets = e.Sets,
+                    Reps = e.Reps
+                }).ToList()
+            };
+        }
+
+
+        public async Task CreateWorkoutAsync(WorkoutViewModel model, string userId)
+        {
             var workout = new Workout
             {
-                Name = workoutVm.Name,
+                Name = model.Name,
                 UserId = userId
             };
 
-            if (workoutVm.SelectedExercises != null && workoutVm.SelectedExercises.Any())
+            foreach (var exId in model.SelectedExerciseIds)
             {
-                foreach (var exerciseVm in workoutVm.SelectedExercises)
+                workout.WorkoutExercises.Add(new WorkoutExercise
                 {
-                    workout.WorkoutExercises.Add(new WorkoutExercise
-                    {
-                        ExerciseId = exerciseVm.Id
-                    });
-                }
+                    ExerciseId = exId
+                });
             }
 
             _context.Workouts.Add(workout);
             await _context.SaveChangesAsync();
         }
-
     }
 }

@@ -22,13 +22,10 @@ namespace FiTracker.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult CreateWorkout()
+        public async Task<IActionResult> CreateWorkout()
         {
-            var model = new WorkoutViewModel
-            {
-                SelectedExercises = new List<ExerciseViewModel>(),
-                AvailableExercises = new List<ExerciseViewModel>()
-            };
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var model = await _workoutService.GetCreateWorkoutViewModelAsync(userId);
             return View(model);
         }
         [HttpPost]
@@ -36,11 +33,8 @@ namespace FiTracker.Controllers
         public async Task<IActionResult> CreateWorkout(WorkoutViewModel model)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-
-            if (!ModelState.IsValid)
-                return View(model);
-
             await _workoutService.CreateWorkoutAsync(model, userId);
+
             TempData["SuccessMessage"] = $"Workout '{model.Name}' created!";
             return RedirectToAction("Workouts");
         }
