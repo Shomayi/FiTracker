@@ -11,6 +11,7 @@ namespace FiTracker.Models
         public int Sets { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
+        public ICollection<WorkoutExercise> WorkoutExercises { get; set; } = new List<WorkoutExercise>(); 
 
     }
 }

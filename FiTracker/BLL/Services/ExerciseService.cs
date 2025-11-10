@@ -73,13 +73,14 @@ namespace FiTracker.BLL.Services
         }
         public async Task DeleteExerciseAsync(int id, string userId)
         {
-            var exercise = await _context.Exercises.FirstOrDefaultAsync(e => e.Id == id && e.UserId == userId);
+            var exercise = await _context.Exercises.Include(e => e.WorkoutExercises).FirstOrDefaultAsync(e => e.Id == id && e.UserId == userId);
 
             if (exercise == null)
             {
                 throw new InvalidOperationException("Exercise is not found or you do not have permission to edit this exercise");
             }
 
+            _context.WorkoutExercises.RemoveRange(exercise.WorkoutExercises);
             _context.Exercises.Remove(exercise);
             await _context.SaveChangesAsync();
         }

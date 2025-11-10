@@ -34,9 +34,9 @@ namespace FiTracker.Models
 
             builder.Entity<WorkoutExercise>()
                 .HasOne(we => we.Exercise)
-                .WithMany()
+                .WithMany(e => e.WorkoutExercises)
                 .HasForeignKey(we => we.ExerciseId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
