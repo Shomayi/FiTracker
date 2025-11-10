@@ -29,5 +29,31 @@ namespace FiTracker.BLL.Services
             }).ToList();
         }
 
+        public async Task CreateWorkoutAsync(WorkoutViewModel workoutVm, string userId)
+        {
+            if (workoutVm == null)
+                throw new ArgumentNullException(nameof(workoutVm));
+
+            var workout = new Workout
+            {
+                Name = workoutVm.Name,
+                UserId = userId
+            };
+
+            if (workoutVm.SelectedExercises != null && workoutVm.SelectedExercises.Any())
+            {
+                foreach (var exerciseVm in workoutVm.SelectedExercises)
+                {
+                    workout.WorkoutExercises.Add(new WorkoutExercise
+                    {
+                        ExerciseId = exerciseVm.Id
+                    });
+                }
+            }
+
+            _context.Workouts.Add(workout);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

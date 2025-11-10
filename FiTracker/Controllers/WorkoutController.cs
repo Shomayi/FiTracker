@@ -21,5 +21,28 @@ namespace FiTracker.Controllers
             var model = await _workoutService.GetAllWorkoutsAsync(userId);
             return View(model);
         }
+        [HttpGet]
+        public IActionResult CreateWorkout()
+        {
+            var model = new WorkoutViewModel
+            {
+                SelectedExercises = new List<ExerciseViewModel>(),
+                AvailableExercises = new List<ExerciseViewModel>()
+            };
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateWorkout(WorkoutViewModel model)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+            if (!ModelState.IsValid)
+                return View(model);
+
+            await _workoutService.CreateWorkoutAsync(model, userId);
+            TempData["SuccessMessage"] = $"Workout '{model.Name}' created!";
+            return RedirectToAction("Workouts");
+        }
     }
 }

@@ -120,7 +120,7 @@ namespace FiTracker.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Exercises");
+                    b.ToTable("Exercises", (string)null);
                 });
 
             modelBuilder.Entity("FiTracker.Models.Workout", b =>
@@ -143,7 +143,7 @@ namespace FiTracker.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Workouts");
+                    b.ToTable("Workouts", (string)null);
                 });
 
             modelBuilder.Entity("FiTracker.Models.WorkoutExercise", b =>
@@ -161,7 +161,7 @@ namespace FiTracker.Migrations
 
                     b.HasIndex("ExerciseId");
 
-                    b.ToTable("WorkoutExercises");
+                    b.ToTable("WorkoutExercises", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

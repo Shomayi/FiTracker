@@ -23,24 +23,12 @@
     <table class="table">
         <thead>
             <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Weight
-                </th>
-                <th>
-                    Sets
-                </th>
-                <th>
-                    Reps
-                </th>
-                <th>
-                    Edit
-                </th>
-                <th>
-                    Delete
-                </th>
+                <th>Name</th>
+                <th>Weight</th>
+                <th>Sets</th>
+                <th>Reps</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>   
         <tbody>
@@ -48,21 +36,11 @@
                 foreach (var exercise in Model)
                 {
                     <tr>
-                        <td>
-                            @exercise.Name
-                        </td>
-                        <td>
-                            @(exercise.Weight.HasValue? (exercise.Weight.Value == 0? "Bodyweight": $"{exercise.Weight.Value:0.#} {(ViewBag.PreferredWeightUnit)}"): "")
-                        </td>
-                        <td>
-                            @exercise.Sets
-                        </td>
-                        <td>
-                            @exercise.Reps
-                        </td>
-                        <td>
-                            <a asp-action="EditExercise" asp-route-id="@exercise.Id" class="btn btn-primary btn-sm">Edit</a>
-                        </td>
+                        <td>@exercise.Name</td>
+                        <td>@(exercise.Weight.HasValue? (exercise.Weight.Value == 0? "Bodyweight": $"{exercise.Weight.Value:0.#} {(ViewBag.PreferredWeightUnit)}"): "")</td>
+                        <td>@exercise.Sets</td>
+                        <td>@exercise.Reps</td>
+                        <td><a asp-action="EditExercise" asp-route-id="@exercise.Id" class="btn btn-primary btn-sm">Edit</a></td>
                         <td>
                             <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal-@exercise.Id">X</button>
                             <div class="modal fade" id="deleteModal-@exercise.Id" tabindex="-1" aria-labelledby="deleteModalLabel-@exercise.Id" aria-hidden="true">

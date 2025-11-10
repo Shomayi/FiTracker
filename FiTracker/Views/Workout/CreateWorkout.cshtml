@@ -1,0 +1,65 @@
+﻿@model FiTracker.ViewModels.WorkoutViewModel
+
+@{
+    ViewData["Title"] = "Create Workout";
+}
+
+<div class="text-center">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+</div>
+
+<form asp-action="CreateWorkout" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label class="form-label">Workout Name</label>
+        <input class="form-control" asp-for="Name" placeholder="Enter workout name" />
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h5>Available Exercises</h5>
+            <select id="availableExercises" class="form-select" size="10" multiple>
+                @foreach (var ex in Model.AvailableExercises)
+                {
+                    <option value="@ex.Id">@ex.Name (@(ex.Weight == 0 ? "Bodyweight" : $"{ex.Weight:0.#}"))</option>
+                }
+            </select>
+            <button type="button" id="addExerciseBtn" class="btn btn-primary mt-2">Add &gt;&gt;</button>
+        </div>
+
+        <div class="col-md-6">
+            <h5>Selected Exercises</h5>
+            <select id="selectedExercises" name="SelectedExercises" class="form-select" size="10" multiple>
+                @foreach (var ex in Model.SelectedExercises)
+                {
+                    <option value="@ex.Id">@ex.Name (@(ex.Weight == 0 ? "Bodyweight" : $"{ex.Weight:0.#}"))</option>
+                }
+            </select>
+            <button type="button" id="removeExerciseBtn" class="btn btn-danger mt-2">&lt;&lt; Remove</button>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Save Workout</button>
+</form>
+
+@section Scripts {
+    <script>
+        const addBtn = document.getElementById("addExerciseBtn");
+        const removeBtn = document.getElementById("removeExerciseBtn");
+        const available = document.getElementById("availableExercises");
+        const selected = document.getElementById("selectedExercises");
+
+        addBtn.addEventListener("click", function () {
+            Array.from(available.selectedOptions).forEach(opt => {
+                selected.appendChild(opt);
+            });
+        });
+
+        removeBtn.addEventListener("click", function () {
+            Array.from(selected.selectedOptions).forEach(opt => {
+                available.appendChild(opt);
+            });
+        });
+    </script>
+}
