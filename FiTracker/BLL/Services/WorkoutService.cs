@@ -29,6 +29,32 @@ namespace FiTracker.BLL.Services
             }).ToList();
         }
 
+        public async Task<WorkoutViewModel> GetWorkoutByIdAsync(int id, string userId)
+        {
+            var workout = await _context.Workouts
+                .Include(w => w.WorkoutExercises)
+                    .ThenInclude(we => we.Exercise)
+                .FirstOrDefaultAsync(w => w.Id == id && w.UserId == userId);
+
+            if (workout == null) return null;
+
+            return new WorkoutViewModel
+            {
+                Id = workout.Id,
+                Name = workout.Name,
+                SelectedExercises = workout.WorkoutExercises
+                    .Select(we => new ExerciseViewModel
+                    {
+                        Id = we.Exercise.Id,
+                        Name = we.Exercise.Name,
+                        Weight = we.Exercise.Weight,
+                        Sets= we.Exercise.Sets,
+                        Reps= we.Exercise.Reps
+                    })
+                    .ToList()
+            };
+        }
+
         public async Task<WorkoutViewModel> GetCreateWorkoutViewModelAsync(string userId)
         {
             var exercises = await _context.Exercises

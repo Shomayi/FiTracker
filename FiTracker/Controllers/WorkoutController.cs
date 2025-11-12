@@ -8,10 +8,12 @@ namespace FiTracker.Controllers
     public class WorkoutController : Controller
     {
         private readonly IWorkoutService _workoutService;
+        private readonly IUserSettingsService _userSettingsService;
 
-        public WorkoutController(IWorkoutService workoutService)
+        public WorkoutController(IWorkoutService workoutService, IUserSettingsService userSettingsService)
         {
             _workoutService = workoutService;
+            _userSettingsService = userSettingsService;
         }
 
         [HttpGet]
@@ -35,8 +37,24 @@ namespace FiTracker.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             await _workoutService.CreateWorkoutAsync(model, userId);
 
-            TempData["SuccessMessage"] = $"Workout '{model.Name}' created!";
+            TempData["SuccessMessage"] = $"Workout {model.Name} created!";
             return RedirectToAction("Workouts");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> WorkoutDetails(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var workout = await _workoutService.GetWorkoutByIdAsync(id, userId);
+            var unit = await _userSettingsService.GetPreferredWeightUnitAsync(userId);
+
+            if (workout == null)
+            {
+                TempData["ErrorMessage"] = "Workout not found!";
+                return RedirectToAction("Index");
+            }
+            ViewBag.PreferredWeightUnit = unit;
+            return View(workout);
         }
     }
 }

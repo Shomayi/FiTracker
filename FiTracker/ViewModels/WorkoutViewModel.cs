@@ -8,7 +8,6 @@ namespace FiTracker.ViewModels
         [Required(ErrorMessage = "Workout name can't be empty")]
         public string Name { get; set; }
         public int ExerciseCount { get; set; }
-
         public List<int> SelectedExerciseIds { get; set; } = new();
         public List<ExerciseViewModel> SelectedExercises { get; set; } = new();
         public List<ExerciseViewModel> AvailableExercises { get; set; } = new();

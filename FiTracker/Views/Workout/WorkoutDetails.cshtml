@@ -1,0 +1,43 @@
+﻿@model FiTracker.ViewModels.WorkoutViewModel
+
+@{
+    ViewData["Title"] = "Workout Details";
+    var weightUnit = ViewBag.WeightUnit; 
+}
+
+<div class="text-center">
+    <h1 class="display-4">@Model.Name</h1>
+
+    <h3>Exercises</h3>
+
+    @if (Model.SelectedExercises != null && Model.SelectedExercises.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Exercise Name</th>
+                    <th>Weight</th>
+                    <th>Sets</th>
+                    <th>Reps</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var exercise in Model.SelectedExercises)
+                {
+                    <tr>
+                        <td>@exercise.Name</td>
+                        <td>@(exercise.Weight.GetValueOrDefault() == 0? "Bodyweight": $"{exercise.Weight.Value:0.##} {weightUnit}")</td>
+                    <td>@exercise.Sets</td>
+                    <td>@exercise.Reps</td>
+                </tr>
+                        }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No exercises have been added to this workout yet.</p>
+    }
+
+    <a asp-action="Workouts" asp-controller="Workout" class="btn btn-primary mt-4">Back to Workouts</a>
+</div>
