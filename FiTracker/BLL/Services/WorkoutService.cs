@@ -76,20 +76,22 @@ namespace FiTracker.BLL.Services
             };
         }
 
-
         public async Task CreateWorkoutAsync(WorkoutViewModel model, string userId)
         {
             var workout = new Workout
             {
                 Name = model.Name,
-                UserId = userId
+                UserId = userId,
+                WorkoutExercises = new List<WorkoutExercise>()
             };
 
+            int order = 1;
             foreach (var exId in model.SelectedExerciseIds)
             {
                 workout.WorkoutExercises.Add(new WorkoutExercise
                 {
-                    ExerciseId = exId
+                    ExerciseId = exId,
+                    Order = order++
                 });
             }
 

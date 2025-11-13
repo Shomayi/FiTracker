@@ -34,6 +34,10 @@ namespace FiTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateWorkout(WorkoutViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             await _workoutService.CreateWorkoutAsync(model, userId);
 
