@@ -10,6 +10,6 @@ namespace FiTracker.BLL.Interfaces
         Task CreateWorkoutAsync(WorkoutViewModel workout, string userId);
         Task<WorkoutViewModel> GetCreateWorkoutViewModelAsync(string userId);
         //Task UpdateWorkoutAsync(Workout workout);
-        //Task DeleteWorkoutAsync(int id, string userId);
+        Task DeleteWorkoutAsync(int id, string userId);
     }
 }

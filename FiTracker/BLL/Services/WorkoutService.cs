@@ -98,5 +98,21 @@ namespace FiTracker.BLL.Services
             _context.Workouts.Add(workout);
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteWorkoutAsync(int Id, string userId)
+        {
+            var workout = await _context.Workouts
+                .Include(w => w.WorkoutExercises)
+                .FirstOrDefaultAsync(w => w.Id == Id && w.UserId == userId);
+
+            if (workout == null)
+                throw new InvalidOperationException("Workout not found or access denied.");
+
+            _context.WorkoutExercises.RemoveRange(workout.WorkoutExercises);
+
+            _context.Workouts.Remove(workout);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

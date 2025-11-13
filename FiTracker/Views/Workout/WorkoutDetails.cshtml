@@ -38,6 +38,18 @@
     {
         <p>No exercises have been added to this workout yet.</p>
     }
+    <div class="d-flex justify-content-center gap-2 mt-4">
+        <form asp-action="DeleteWorkout" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn btn-danger"
+                    onclick="return confirm('Are you sure you want to delete this workout?');">
+                Delete Workout
+            </button>
+        </form>
 
-    <a asp-action="Workouts" asp-controller="Workout" class="btn btn-primary mt-4">Back to Workouts</a>
+        <a asp-action="Workouts" asp-controller="Workout" class="btn btn-primary">
+            Back to Workouts
+        </a>
+    </div>
 </div>

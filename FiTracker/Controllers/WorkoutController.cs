@@ -58,7 +58,28 @@ namespace FiTracker.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.PreferredWeightUnit = unit;
+           
+            
             return View(workout);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteWorkout(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            try
+            {
+                await _workoutService.DeleteWorkoutAsync(id, userId);
+                TempData["SuccessMessage"] = "Workout deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
+            return RedirectToAction("Workouts");
         }
     }
 }
